@@ -11,12 +11,21 @@ import { DashboardLayout } from './components/layouts/DashboardLayout';
 
 // Public Pages - lazy loaded so a visitor's first load doesn't include
 // member/admin portal code
+// Public Pages - lazy loaded so a visitor's first load doesn't include
+// member/admin portal code
 const Home = lazy(() => import('./pages/public/Home'));
 const PublicSessions = lazy(() => import('./pages/public/PublicSessions'));
 const Gallery = lazy(() => import('./pages/public/Gallery'));
 const Apply = lazy(() => import('./pages/public/Apply'));
 const Login = lazy(() => import('./pages/public/Login'));
 const EventDetails = lazy(() => import('./pages/public/EventDetails'));
+
+// Admin Portal Pages - lazy loaded, only fetched for admins
+const AllAttendance = lazy(() => import('./pages/admin/AllAttendance'));
+const SessionForm = lazy(() => import('./pages/admin/SessionForm'));
+const EventForm = lazy(() => import('./pages/admin/EventForm'));
+const Applications = lazy(() => import('./pages/admin/Applications'));
+const GalleryManager = lazy(() => import('./pages/admin/GalleryManager'));
 
 // Member Portal Pages - lazy loaded, only fetched when a logged-in member
 // actually navigates into the dashboard
@@ -25,11 +34,7 @@ const MyAttendance = lazy(() => import('./pages/member/MyAttendance'));
 const Sessions = lazy(() => import('./pages/member/Sessions'));
 const SessionDetail = lazy(() => import('./pages/member/SessionDetail'));
 
-// Admin Portal Pages - lazy loaded, only fetched for admins
-const AllAttendance = lazy(() => import('./pages/admin/AllAttendance'));
-const SessionForm = lazy(() => import('./pages/admin/SessionForm'));
-const EventForm = lazy(() => import('./pages/admin/EventForm'));
-const Applications = lazy(() => import('./pages/admin/Applications'));
+
 
 // Simple full-page fallback shown while a lazy route's chunk downloads
 const RouteLoading = () => (
@@ -109,14 +114,15 @@ function App() {
                   </ProtectedRoute>
                 }
               >
-                <Route index element={<Dashboard />} />
-                <Route path="members" element={<AllAttendance />} />
-                <Route path="applications" element={<Applications />} />
-                <Route path="sessions" element={<Sessions />} />
-                <Route path="sessions/new" element={<SessionForm />} />
-                <Route path="events" element={<EventForm />} />
-                <Route path="attendance" element={<AllAttendance />} />
-              </Route>
+                  <Route index element={<Dashboard />} />
+  <Route path="members" element={<AllAttendance />} />
+  <Route path="applications" element={<Applications />} />
+  <Route path="sessions" element={<Sessions />} />
+  <Route path="sessions/new" element={<SessionForm />} />
+  <Route path="events" element={<EventForm />} />
+  <Route path="resources" element={<GalleryManager />} />
+  <Route path="attendance" element={<AllAttendance />} />
+</Route>
 
               {/* Catch-all Fallback */}
               <Route path="*" element={<Navigate to="/" replace />} />

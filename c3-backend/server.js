@@ -9,15 +9,20 @@ import attendanceRoutes from './routes/attendanceRoutes.js';
 import eventRoutes from './routes/eventRoutes.js';
 import publicRoutes from './routes/publicRoutes.js';
 import applicationRoutes from './routes/applicationRoutes.js';
+import galleryRoutes from './routes/galleryRoutes.js';
+
 
 dotenv.config();
 connectDB();
 
 const app = express();
 
+
 app.use(cors());
 app.use(express.json());
 
+
+app.use('/api/gallery', galleryRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/sessions', sessionRoutes);

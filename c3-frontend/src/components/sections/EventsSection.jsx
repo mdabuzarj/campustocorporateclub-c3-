@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import BlurText from '../reactbits/BlurText';
 import CountUp from '../reactbits/CountUp';
 import Carousel from '../reactbits/Carousel';
 import Masonry from '../reactbits/Masonry';
@@ -113,13 +112,9 @@ const ClosingCTA = () => {
   return (
     <div ref={ref} className="text-center py-16 px-4">
       {inView && (
-        <BlurText
-          text="The next memory could be yours."
-          direction="top"
-          delay={40}
-          stepDuration={0.35}
-          className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-white justify-center"
-        />
+        <p className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-white justify-center">
+          The next memory could be yours.
+        </p>
       )}
     </div>
   );
@@ -148,14 +143,20 @@ export const EventsSection = () => {
     href: `/events/${event.slug}`
   }));
 
-  const galleryItems = events.flatMap(event =>
-    (event.gallery || []).map((img, i) => ({
-      id: `${event.slug}-${i}`,
-      img,
-      url: `/events/${event.slug}`,
-      height: 300 + ((i * 73 + event.slug.length * 17) % 220)
-    }))
-  );
+  const [galleryImages, setGalleryImages] = useState([]);
+
+  useEffect(() => {
+    api.get('/public/gallery')
+      .then(res => setGalleryImages(res.data))
+      .catch(() => setGalleryImages([]));
+  }, []);
+
+  const galleryItems = galleryImages.map((img, i) => ({
+    id: `gallery-${i}`,
+    img,
+    url: '#',
+    height: 300 + ((i * 73) % 220)
+  }));
 
   useEffect(() => {
     const node = introRef.current;
@@ -223,13 +224,9 @@ export const EventsSection = () => {
       <div ref={introRef} className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
         <p className="text-xs uppercase tracking-widest text-[#38BDF8] font-medium mb-3">Our Events</p>
         {introInView && (
-          <BlurText
-            text="Learning through experience. Building memories together."
-            direction="top"
-            delay={40}
-            stepDuration={0.35}
-            className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-white max-w-3xl"
-          />
+          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-white max-w-3xl">
+            Learning through experience. Building memories together.
+          </h2>
         )}
       </div>
 
@@ -245,7 +242,7 @@ export const EventsSection = () => {
         )}
         {!loading && !error && mountCarousel && carouselItems.length > 0 && (
           <div
-            className={`transition-opacity duration-500 ${showIntroParagraph ? 'opacity-100' : 'opacity-0'}`}
+            className={`transition-opacity duration-50 ${showIntroParagraph ? 'opacity-100' : 'opacity-100'}`}
             aria-hidden={!showIntroParagraph}
           >
             <Carousel
@@ -277,7 +274,7 @@ export const EventsSection = () => {
           animateFrom="bottom"
           scaleOnHover
           hoverScale={0.96}
-          blurToFocus
+          blurToFocus={false}
           colorShiftOnHover={false}
         />
       </div>
